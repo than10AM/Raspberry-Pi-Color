@@ -1,7 +1,7 @@
 
 currentcolor="0 0 0"
 israinbowrunning=False
-import discord, sys, subprocess,os
+import discord, sys, subprocess,os, signal
 
 from subprocess import Popen, PIPE
 
@@ -10,14 +10,11 @@ import time
 
 
 def cmdcolor(nextcolor):
+    global currentcolor
     
-    with open('cmd.sh','r+') as myfile:
-        data = myfile.read()
-        myfile.seek(0)
-        global currentcolor
-        myfile.write('sudo python3 ledcontroller.py '+ currentcolor + " " +  nextcolor)
-        myfile.truncate()
-    os.system("./cmd.sh")
+    result = subprocess.Popen(' exec sudo python3 ledcontroller.py ' + currentcolor + ' '+ nextcolor, stdout=subprocess.PIPE, shell=True)
+    time.sleep(1)
+    os.kill(result.pid, signal.SIGKILL)   # should always kill a process  
     currentcolor=nextcolor
 
     
@@ -54,6 +51,14 @@ class MyClient(discord.Client):
         if message.content.lower()  == 'purple':
             cmdcolor("159 43 120")
             await message.channel.send('okay set color from '+currentcolor+' to ' + "230 230 250")      
+
+        if message.content.lower()  == 'grey':
+            cmdcolor("200 200 200")
+            await message.channel.send('okay set color from '+currentcolor+' to ' + "255 255 255")           
+        
+        if message.content.lower()  == 'white':
+            cmdcolor("255 255 255")
+            await message.channel.send('okay set color from '+currentcolor+' to ' + "255 255 255")           
         
         if message.content.lower()  == 'rainbow':
             process = Popen(['sh', 'rainbowcmd.sh', '-d'])
@@ -63,8 +68,13 @@ class MyClient(discord.Client):
             cmdcolor("248 24 148")
             await message.channel.send('okay set color from '+currentcolor+' to ' + "230 230 250")      
           
-    
+        if message.content.lower()  == 'black':
+            cmdcolor("0 0 0")
+            await message.channel.send('okay set color from '+currentcolor+' to ' + "0 0 0")          
 
-
+        if message.content.lower()  == 'yellow':
+            cmdcolor("255 255 0")
+            await message.channel.send('okay set color from '+currentcolor+' to ' + "0 0 0")
+            
 client = MyClient()
-client.run('Token')
+client.run('OTc2NDU0Mjk0Nzc5ODU4OTU0.Gd4F23.wE_w_Et1QcwGzv7Q29lXOZFjyBd9bdSLnGEjjA')
