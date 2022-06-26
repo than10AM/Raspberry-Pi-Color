@@ -15,9 +15,11 @@ pixels = neopixel.NeoPixel(
 )
 def mixrgb(rgb1, rgb2, factor):
     return round(rgb1[0]*factor + rgb2[0]*(1-factor)), round(rgb1[1]*factor + rgb2[1]*(1-factor)), round(rgb1[2]*factor + round(rgb2[2]*(1-factor)))
+
+
+
 def sigmoid(x):
     return 1/(1 + np.exp(x))
-
    
 def Sigma(rgb1, rgb2, TimeStep):
     step=0
